@@ -1,14 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
 const usersRepo = require('./repositories/users');
 
 const app = express();
 // apply middleware to all requests
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieSession({
+    keys: ['hjj123ka94bkag7abvhh??u45%$234$%%^^']
+}));
 
 app.get('/', (req, res) => {
     res.send(`
         <div>
+            Your id is: ${req.session.userID}
             <form method="POST">
                 <input name="email" placeholder="email">
                 <input name="password" placeholder="password">
@@ -28,6 +33,11 @@ app.post('/', async (req, res) => {
     if(password !== passwordConfirmation) {
         return res.send('Passwords do not match!');
     }
+
+    const user = await usersRepo.create({email, password});
+
+    req.session.userID = user.id;
+
     res.send('Account created!');
 });
 
