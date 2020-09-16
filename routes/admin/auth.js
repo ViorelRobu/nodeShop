@@ -27,12 +27,12 @@ router.post(
 
     req.session.userID = user.id;
 
-    res.send('Account created!');
+    res.redirect('/admin/products');
 });
 
 router.get('/signout', (req, res) => {
     req.session = null;
-    res.send('You are logged out!');
+    res.redirect('/signin');
 });
 
 router.get('/signin', (req, res) => {
@@ -51,8 +51,8 @@ router.post(
         email
     });
     
-    req.session.userID = user.id;
-    res.send('You are signed in!');
+    req.session.userId = user.id;
+    res.redirect('/admin/products');
 });
 
 module.exports = router;
